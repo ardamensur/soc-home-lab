@@ -42,16 +42,15 @@ host (the endpoint), and where it actually came from (the attacker's real IP).
 This is the practical argument for defence in depth at the logging layer: one
 source told us *what*, the other told us *who*.
 
-
 ## Evidence
 
 Suricata captured the attack with the real source IP (192.168.10.10), while the Windows event log showed only 127.0.0.1:
 
-![Suricata SMB alert with real source IP](../screenshots/suricata-smb-real-source-ip.png)
+![Suricata SMB alert with real source IP](../screenshots/suricata-smb-real-source-ip.jpeg)
 
 Suricata alerts forwarded into the Wazuh SIEM:
 
-![Suricata alerts in Wazuh](../screenshots/suricata-wazuh-alerts.png)
+![Suricata alerts in Wazuh](../screenshots/suricata-wazuh-alerts.jpeg)
 
 ## MITRE ATT&CK
 
