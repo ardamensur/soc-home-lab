@@ -42,6 +42,12 @@ tagged with the target account, the source, and the MITRE technique.
 A companion rule (100021) fires on Event 4740 when an account is locked out,
 which is the natural follow on to a sustained brute force.
 
+## Evidence
+
+Seven failed domain logons correlated into a single brute force alert (rule 100020) on the Domain Controller:
+
+![AD brute force alert 100020](../screenshots/ad-bruteforce-alert-100020.jpeg)
+
 ## Why this matters
 
 The Domain Controller is the highest value log source in a Windows
