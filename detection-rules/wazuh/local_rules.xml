@@ -1,0 +1,105 @@
+<!-- Local rules - MITRE ATT&CK mapped detection rules -->
+<!-- SOC Home Lab -->
+
+<group name="local,attack,">
+
+  <!-- SSH brute force -->
+  <rule id="100002" level="10" frequency="5" timeframe="60">
+    <if_matched_sid>5710</if_matched_sid>
+    <description>Brute force attack detected - multiple SSH login failures</description>
+    <mitre><id>T1110</id></mitre>
+    <group>authentication_failed,brute_force,</group>
+  </rule>
+
+  <!-- Successful login after failed attempts -->
+  <rule id="100003" level="12">
+    <if_sid>5715</if_sid>
+    <description>Successful login after multiple failed attempts - possible compromised account</description>
+    <mitre><id>T1078</id></mitre>
+    <group>authentication_success,brute_force,</group>
+  </rule>
+
+  <!-- Windows logon brute force -->
+  <rule id="100004" level="10" frequency="5" timeframe="60">
+    <if_matched_sid>60122</if_matched_sid>
+    <description>Windows RDP/logon brute force - multiple failed attempts</description>
+    <mitre><id>T1110</id></mitre>
+    <group>authentication_failed,brute_force,windows,</group>
+  </rule>
+
+  <!-- New Windows user created -->
+  <rule id="100005" level="10">
+    <if_sid>60137</if_sid>
+    <description>New Windows user account created - possible persistence</description>
+    <mitre><id>T1136.001</id></mitre>
+    <group>account_created,persistence,windows,</group>
+  </rule>
+
+  <!-- Sysmon scripting interpreter execution -->
+  <rule id="100006" level="6">
+    <if_sid>61603</if_sid>
+    <match>powershell|cmd.exe|wscript|cscript</match>
+    <description>Sysmon - Scripting interpreter execution detected</description>
+    <mitre><id>T1059</id></mitre>
+    <group>sysmon,execution,</group>
+  </rule>
+
+  <!-- Suspicious PowerShell keywords -->
+  <rule id="100007" level="12">
+    <if_sid>100006</if_sid>
+    <match>encodedcommand|bypass|hidden|downloadstring|invoke-expression</match>
+    <description>Suspicious PowerShell command with evasion keywords</description>
+    <mitre><id>T1059.001</id></mitre>
+    <group>sysmon,powershell,execution,</group>
+  </rule>
+
+  <!-- Process injection via CreateRemoteThread -->
+  <rule id="100008" level="12">
+    <if_sid>61640</if_sid>
+    <description>Sysmon - Process injection via CreateRemoteThread</description>
+    <mitre><id>T1055</id></mitre>
+    <group>sysmon,process_injection,</group>
+  </rule>
+
+  <!-- Port scan -->
+  <rule id="100009" level="8" frequency="10" timeframe="30">
+    <if_matched_sid>5706</if_matched_sid>
+    <description>Possible port scan - multiple dropped connections</description>
+    <mitre><id>T1046</id></mitre>
+    <group>network_scan,reconnaissance,</group>
+  </rule>
+
+  <!-- Security tool disabled -->
+  <rule id="100010" level="12">
+    <if_sid>61603</if_sid>
+    <match>stop-service|disable.*firewall|sc stop windefend|netsh.*off</match>
+    <description>Attempt to disable security tools detected</description>
+    <mitre><id>T1562.001</id></mitre>
+    <group>defense_evasion,sysmon,</group>
+  </rule>
+
+  <!-- Failed sudo -->
+  <rule id="100011" level="8">
+    <if_sid>5401</if_sid>
+    <description>Failed sudo attempt - possible privilege escalation</description>
+    <mitre><id>T1548.003</id></mitre>
+    <group>privilege_escalation,sudo,</group>
+  </rule>
+
+  <!-- AD domain logon brute force -->
+  <rule id="100020" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>60122</if_matched_sid>
+    <description>AD - Domain account brute force detected (multiple failed logons)</description>
+    <mitre><id>T1110</id></mitre>
+    <group>authentication_failed,ad_attack,</group>
+  </rule>
+
+  <!-- AD account lockout -->
+  <rule id="100021" level="10">
+    <if_sid>60123</if_sid>
+    <description>AD - Domain account locked out after failed attempts</description>
+    <mitre><id>T1110</id></mitre>
+    <group>account_lockout,ad_attack,</group>
+  </rule>
+
+</group>
