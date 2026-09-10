@@ -4,7 +4,7 @@ A hands-on security operations lab built on VirtualBox. It brings together a SIE
 
 ## Architecture
 
-Four virtual machines on an isolated internal network (192.168.10.0/24):
+Five virtual machines across two isolated network segments:
 
 | VM | Role | OS |
 |----|------|-----|
@@ -12,8 +12,14 @@ Four virtual machines on an isolated internal network (192.168.10.0/24):
 | Kali | Attacker + Nessus scanner | Kali Linux |
 | Windows Endpoint | Domain-joined workstation + Sysmon | Windows 10 Pro |
 | Domain Controller | Active Directory + DNS (lab.local) | Windows Server 2022 |
+| OPNsense | Firewall between two network segments | OPNsense CE 26.7 |
 
 Each Windows host and the Kali box runs a Wazuh agent that ships logs to the manager. The manager also runs Suricata, so the same traffic is seen at both the network and endpoint layers.
+
+The network is split into two segments by the OPNsense firewall: a server
+segment (lab-net, 192.168.10.0/24) and a client segment (user-net,
+192.168.20.0/24). Traffic between them is filtered and logged, and the
+firewall forwards its logs to the SIEM over syslog.
 
 ## Detection capabilities
 
@@ -23,6 +29,7 @@ Each Windows host and the Kali box runs a Wazuh agent that ships logs to the man
 | Endpoint | Wazuh + Sysmon | 12 custom detection rules on Windows and Linux |
 | Active Directory | Wazuh agent on the DC | Custom rules for domain brute force and account lockout |
 | Vulnerability mgmt | Nessus Essentials | Scan, remediate, and verify workflow |
+| Network segmentation | OPNsense firewall | Rule-based access control between segments, logs forwarded to SIEM |
 
 ## MITRE ATT&CK coverage
 
@@ -48,6 +55,7 @@ Custom rules are mapped to the following techniques:
 ## Repository layout
 
 - `detection-rules/` custom Wazuh and Suricata rules
+- `detection-rules/opnsense/` firewall rules for network segmentation
 - `attack-scenarios/` step by step write ups of each attack and how it was detected
 - `vulnerability-management/` the Nessus scan and remediation walkthrough
 - `architecture/` network topology and design notes
